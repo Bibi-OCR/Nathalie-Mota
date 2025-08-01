@@ -1,0 +1,25 @@
+<?php get_header(); ?>
+
+<main class="main-content">
+    <div class="container">
+        <?php while (have_posts()) : the_post(); ?>
+            <article class="page-content-wrapper">
+                <header class="page-header">
+                    <h1 class="page-title"><?php the_title(); ?></h1>
+                </header>
+
+                <?php if (has_post_thumbnail()) : ?>
+                    <div class="page-featured-image">
+                        <?php the_post_thumbnail('large'); ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="page-content">
+                    <?php the_content(); ?>
+                </div>
+            </article>
+        <?php endwhile; ?>
+    </div>
+</main>
+
+<?php get_footer(); ?>
