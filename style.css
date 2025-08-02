@@ -5,3 +5,89 @@ Version: 1.0
 Author:Bilel Zamouri
 */
 
+
+/*
+Styles css pour le header
+*/
+
+.site-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 80px;
+}
+
+.site-header__logo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.site-header__logo img {
+  max-height: 50px;
+  width: 216px;
+  height: 14px;
+}
+
+.site-header__nav {
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 100px;
+}
+
+.site-header__nav .menu {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header__nav .menu li a {
+  font-family: 'Space Mono', monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  text-decoration: none;
+  color: #333;
+  padding: 8px 12px;
+}
+
+.site-header__nav .menu li a:hover {
+  color: #000;
+}
+
+/*
+Styles css pour le footer
+*/
+
+
+.site-footer .container {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.footer-navigation .footer-menu {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-navigation .footer-menu li a {
+  font-family: 'Space Mono', monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  color: #666;
+  text-decoration: none;
+}
+
+.footer-navigation .footer-menu li a:hover {
+  color: #000; 
+}
