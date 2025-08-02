@@ -8,4 +8,4 @@
 </main>
 
 <?php get_footer(); ?>
->>>>>>> f2e1688 (création header et footer)
+
