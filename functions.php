@@ -19,3 +19,18 @@ function register_custom_menus() {
   ));
 }
 add_action('after_setup_theme', 'register_custom_menus');
+
+
+function add_data_modal_attribute($atts, $item, $args) {
+
+    if ($args->theme_location === 'header') {
+
+        if (strtolower($item->title) === 'contact') {
+            $atts['data-modal'] = 'contact';
+            $atts['href'] = '#';
+        }
+    }
+    return $atts;
+}
+add_filter('nav_menu_link_attributes', 'add_data_modal_attribute', 10, 3);
+

@@ -58,6 +58,7 @@ Styles css pour le header
 
 .site-header__nav .menu li a:hover {
   color: #000;
+  font-weight: 700;
 }
 
 /*
@@ -89,5 +90,137 @@ Styles css pour le footer
 }
 
 .footer-navigation .footer-menu li a:hover {
-  color: #000; 
+  color: #000;
+    font-weight: 700;
 }
+
+/*
+Styles css pour la modale de contact
+*/
+
+/* MODALE OVERLAY */
+#contact-modal.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 115vh;
+    background-color: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+#contact-modal.active {
+    display: flex;
+}
+
+/* CONTENU MODALE COMPACT */
+.modal-content {
+    background-color: white;
+    width: 90%;
+    max-width: 520px;
+    border: 5px solid black;
+    padding: 2rem 1.5rem;
+    position: relative;
+    animation: animatetop 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* IMAGE COMPACTE */
+.forminator-ui img {
+    display: block;
+    transform: scale(1.6);
+    transform-origin: center top;
+    margin: 0 auto 2rem auto;
+    max-width: 100%;
+}
+
+/* BOUTON FERMETURE */
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* FORMULAIRE GLOBAL */
+.forminator-ui {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+/* INPUTS & TEXTAREAS */
+.forminator-input,
+.forminator-textarea {
+    font-family: Poppins, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* LABELS */
+.forminator-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: left;
+    font-family: sans-serif;
+}
+
+
+/* BOUTON ENVOYER */
+#forminator-module-27 > div.forminator-row.forminator-row-last > div > div > button {
+    font-family: 'Space Mono';
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    vertical-align: middle;
+    width: 100%;
+    padding: 1rem;
+    background-color: #D8D8D8;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    align-items: center;
+}
+
+.forminator-button-submit:hover {
+    background-color: #ccc;
+}
+
+
+
+
+
+/* ANIMATION Modal */
+@keyframes animatetop {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+
