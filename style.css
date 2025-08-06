@@ -5,6 +5,9 @@ Version: 1.0
 Author:Bilel Zamouri
 */
 
+body{
+  margin: 0px;
+}
 
 /*
 Styles css pour le header
@@ -14,7 +17,6 @@ Styles css pour le header
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
   height: 80px;
 }
 
@@ -61,6 +63,56 @@ Styles css pour le header
   font-weight: 700;
 }
 
+
+/*
+Styles css pour le hero header
+*/
+
+
+.hero-header {
+  width: 100%;
+}
+
+.hero-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+}
+
+.hero-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero-title-wrapper {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-title {
+  font-family: 'Space Mono', monospace;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 96px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 2px white;
+  text-shadow: none;
+}
+
+
 /*
 Styles css pour le footer
 */
@@ -91,7 +143,7 @@ Styles css pour le footer
 
 .footer-navigation .footer-menu li a:hover {
   color: #000;
-    font-weight: 700;
+  font-weight: 700;
 }
 
 /*
@@ -100,123 +152,136 @@ Styles css pour la modale de contact
 
 /* MODALE OVERLAY */
 #contact-modal.modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 115vh;
-    background-color: rgba(0,0,0,0.6);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;    
+  background-color: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+#forminator-module-27:not(.select2-dropdown) {
+  margin: 0;
+}
+
+#forminator-module-27 .forminator-row-last {
+  margin-bottom: 0;
 }
 
 #contact-modal.active {
-    display: flex;
+  display: flex;
 }
 
 /* CONTENU MODALE COMPACT */
 .modal-content {
-    background-color: white;
-    width: 90%;
-    max-width: 520px;
-    border: 5px solid black;
-    padding: 2rem 1.5rem;
-    position: relative;
-    animation: animatetop 0.5s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
+  background-color: white;
+  width: 90%;
+  max-width: 520px;
+  border: 2px solid #ccc;
+  padding: 2rem 1.5rem;
+  position: relative;
+  animation: animatetop 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 /* IMAGE COMPACTE */
 .forminator-ui img {
-    display: block;
-    transform: scale(1.6);
-    transform-origin: center top;
-    margin: 0 auto 2rem auto;
-    max-width: 100%;
+  display: block;
+  transform: scale(1.6);
+  transform-origin: center top;
+  margin: 0 auto 2rem auto;
+  max-width: 100%;
 }
 
 /* BOUTON FERMETURE */
 .modal-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 2rem;
-    background: none;
-    border: none;
-    cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 /* FORMULAIRE GLOBAL */
 .forminator-ui {
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 /* INPUTS & TEXTAREAS */
-.forminator-input,
-.forminator-textarea {
-    font-family: Poppins, sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 18px;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+
+.forminator-ui#forminator-module-27.forminator-design--default .forminator-label {
+  font-family: Poppins, sans-serif !important;
+  font-size: 12px;
+  line-height: 18px;
+  width: 100%;
+  margin-bottom: 5PX;
+
+}
+
+
+
+.forminator-ui#forminator-module-27.forminator-design--default .forminator-input, .forminator-ui#forminator-module-27.forminator-design--default .forminator-input input, .forminator-ui#forminator-module-27.forminator-design--default .forminator-iti-input .iti__selected-dial-code,
+.forminator-ui#forminator-module-27.forminator-design--default .forminator-textarea {
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
 
 /* LABELS */
 .forminator-label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    text-align: left;
-    font-family: sans-serif;
+  display: block;
+  margin-bottom: 0.3rem;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: left;
+  font-family: sans-serif;
 }
 
 
 /* BOUTON ENVOYER */
-#forminator-module-27 > div.forminator-row.forminator-row-last > div > div > button {
-    font-family: 'Space Mono';
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 100%;
-    vertical-align: middle;
-    width: 100%;
-    padding: 1rem;
-    background-color: #D8D8D8;
-    border: none;
-    text-transform: uppercase;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    align-items: center;
+.forminator-ui#forminator-module-27.forminator-design--default .forminator-button-submit {
+  font-family: 'Space Mono';
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+  vertical-align: middle;
+  width: 100%;
+  padding: 1rem;
+  background-color: #D8D8D8;
+  border: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  align-items: center;
 }
 
-.forminator-button-submit:hover {
-    background-color: #ccc;
+.forminator-ui#forminator-module-27.forminator-design--default .forminator-button-submit:hover {
+  background-color: #ccc;
 }
 
 
 /* ANIMATION Modal */
 @keyframes animatetop {
-    from {
+  from {
         transform: translateY(-50px);
         opacity: 0;
-    }
-    to {
+  }
+  to  {
         transform: translateY(0);
         opacity: 1;
-    }
+ }
 }
 
 
