@@ -25,6 +25,27 @@ document.addEventListener('DOMContentLoaded', function () {
     openBtns.forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
+
+            // Récupérer la référence photo depuis un data attribute
+            const refPhotoValue = btn.getAttribute('data-refphoto');
+
+            // Trouver le formulaire dans la modale
+            const form = modal.querySelector('form');
+
+            if (form && refPhotoValue) {
+                let action = form.getAttribute('action') || '';
+
+                // Nettoyer l'action pour ne pas accumuler plusieurs fois le paramètre
+                action = action.replace(/(\?|&)refphoto=[^&]*/g, '');
+
+                if (action.indexOf('?') === -1) {
+                    action += '?refphoto=' + encodeURIComponent(refPhotoValue);
+                } else {
+                    action += '&refphoto=' + encodeURIComponent(refPhotoValue);
+                }
+                form.setAttribute('action', action);
+            }
+
             openModal();
         });
     });
