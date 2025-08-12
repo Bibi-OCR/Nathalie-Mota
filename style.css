@@ -285,5 +285,59 @@ Styles css pour la modale de contact
  }
 }
 
+/* Grille photos */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(25vw, 1fr));
+    gap: 2vh;
+    padding: 2vh;
+}
+
+.photo-block {
+    position: relative;
+    overflow: hidden;
+}
+
+.photo-block__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 30vh;
+}
+
+.photo-block__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.photo-block__image-wrapper:hover .photo-block__image {
+    filter: grayscale(0%);
+}
+
+.photo-block__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 1vh;
+    display: flex;
+    justify-content: space-between;
+    transition: background 0.3s ease;
+}
+
+.photo-block__image-wrapper:hover .photo-block__overlay {
+    background: rgba(0,0,0,0.8);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .photo-grid {
+        grid-template-columns: repeat(auto-fill, minmax(45vw, 1fr));
+    }
+}
 
 
