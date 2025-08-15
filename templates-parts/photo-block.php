@@ -1,7 +1,7 @@
 <?php
 /**
+ * 
  * Template pour l'affichage d'un bloc photo
- * Version avec icônes SVG intégrées
  */
 
 $reference = get_field('reference');
