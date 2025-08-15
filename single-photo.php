@@ -149,4 +149,73 @@ if ($date_capture) {
     </div>
 </main>
 
+<!-- Section Photos Apparentées -->
+    <section class="related-photos">
+        <div class="container">
+            <h2 class="related-photos-title">Vous aimerez aussi</h2>
+            
+            <?php
+            // Récupérer les catégories de la photo actuelle
+            $current_categories = get_the_terms(get_the_ID(), 'photo_categorie');
+            
+            if (!empty($current_categories) && !is_wp_error($current_categories)) :
+                // Récupérer les IDs des catégories
+                $category_ids = array();
+                foreach ($current_categories as $category) {
+                    $category_ids[] = $category->term_id;
+                }
+                
+                // Query pour les photos apparentées
+                $related_args = array(
+                    'post_type' => 'photo',
+                    'posts_per_page' => 2,
+                    'post__not_in' => array(get_the_ID()), // Exclure la photo actuelle
+                    'orderby' => 'rand', // Ordre aléatoire
+                    'tax_query' => array(
+                        array(
+                            'taxonomy' => 'photo_categorie',
+                            'field'    => 'term_id',
+                            'terms'    => $category_ids,
+                        ),
+                    ),
+                );
+                
+                $related_query = new WP_Query($related_args);
+                
+                if ($related_query->have_posts()) :
+            ?>
+                    <div class="related-photos-grid">
+                        <?php while ($related_query->have_posts()) : $related_query->the_post(); ?>
+                            <?php get_template_part('templates-parts/photo-block'); ?>
+                        <?php endwhile; ?>
+                    </div>
+            <?php
+                    wp_reset_postdata();
+                else :
+                    // Si aucune photo de la même catégorie, afficher 2 photos aléatoirement
+                    $fallback_args = array(
+                        'post_type' => 'photo',
+                        'posts_per_page' => 2,
+                        'post__not_in' => array(get_the_ID()),
+                        'orderby' => 'rand',
+                    );
+                    
+                    $fallback_query = new WP_Query($fallback_args);
+                    
+                    if ($fallback_query->have_posts()) :
+            ?>
+                        <div class="related-photos-grid">
+                            <?php while ($fallback_query->have_posts()) : $fallback_query->the_post(); ?>
+                                <?php get_template_part('templates-parts/photo-block'); ?>
+                            <?php endwhile; ?>
+                        </div>
+            <?php
+                        wp_reset_postdata();
+                    endif;
+                endif;
+            endif;
+            ?>
+        </div>
+    </section>
+
 <?php get_footer(); ?>

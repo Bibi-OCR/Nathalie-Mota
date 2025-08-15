@@ -493,4 +493,212 @@ Styles css pour la modale de contact
 }
 
 
+/* 
+==============================================
+STYLES POUR LES PHOTOS APPARENTÉES
+==============================================
+*/
 
+/* Section des photos apparentées */
+.related-photos {
+    padding: 60px 0 80px 0;
+    background-color: #fff;
+}
+
+.related-photos .container {
+    max-width: 1126px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.related-photos-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 400;
+    font-size: 18px;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Grille des photos apparentées */
+.related-photos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width:1140px;
+    margin: 0 auto;
+}
+
+/* Bloc photo individuel */
+.photo-block {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+}
+
+.photo-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Overlay au survol */
+.photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+}
+
+.photo-container:hover .photo-overlay {
+    opacity: 1;
+}
+
+.photo-container:hover .photo-image {
+    transform: scale(1.05);
+}
+
+/* Icônes dans l'overlay */
+.icon-eye,
+.icon-fullscreen {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Œil parfaitement centré */
+.icon-eye {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Plein écran en haut à droite */
+.icon-fullscreen {
+    top: 20px;
+    right: 20px;
+}
+
+/* Effets de survol sophistiqués */
+.icon-eye:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+
+}
+
+.icon-fullscreen:hover {
+    transform: scale(1.15);
+}
+
+.icon-eye img,
+.icon-fullscreen img {
+    width: 24px;
+    height: 24px;
+    filter: invert(1);
+    opacity: 0.9;
+}
+
+
+/* Métadonnées */
+.photo-meta {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+}
+
+.photo-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.photo-reference,
+.photo-category {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: white;
+    text-transform: uppercase;
+}
+
+.photo-reference {
+    font-weight: 400;
+}
+
+.photo-category {
+    font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .related-photos {
+        padding: 40px 0 50px 0;
+    }
+    
+    .related-photos-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        max-width: 100%;
+    }
+    
+    .related-photos-title {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+    
+    .icon-eye {
+        right: 60px;
+    }
+    
+    .icon-fullscreen {
+        left: 60px;
+    }
+    
+    .photo-meta {
+        bottom: 15px;
+        left: 15px;
+        right: 15px;
+    }
+    
+    .photo-reference,
+    .photo-category {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .icon-eye {
+        right: 40px;
+    }
+    
+    .icon-fullscreen {
+        left: 40px;
+    }
+    
+    .photo-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
