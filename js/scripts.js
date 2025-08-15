@@ -25,27 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
     openBtns.forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
-
-            // Récupérer la référence photo depuis un data attribute
-            const refPhotoValue = btn.getAttribute('data-refphoto');
-
-            // Trouver le formulaire dans la modale
-            const form = modal.querySelector('form');
-
-            if (form && refPhotoValue) {
-                let action = form.getAttribute('action') || '';
-
-                // Nettoyer l'action pour ne pas accumuler plusieurs fois le paramètre
-                action = action.replace(/(\?|&)refphoto=[^&]*/g, '');
-
-                if (action.indexOf('?') === -1) {
-                    action += '?refphoto=' + encodeURIComponent(refPhotoValue);
-                } else {
-                    action += '&refphoto=' + encodeURIComponent(refPhotoValue);
-                }
-                form.setAttribute('action', action);
-            }
-
             openModal();
         });
     });
@@ -80,3 +59,45 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("✅ JS chargé et modale connectée");
 });
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('contact-modal');
+    const closeBtn = modal ? modal.querySelector('.modal-close') : null;
+    const openBtn = document.querySelector('.contact-button'); // un seul bouton
+
+    if (!modal || !openBtn) return;
+
+    function openModal() {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Récupérer la référence depuis la photo
+        const photoElem = document.querySelector('.photo');
+        const refPhotoValue = photoElem ? photoElem.getAttribute('data-ref') : '';
+
+        // Préremplir le champ REF PHOTO
+        const refInput = modal.querySelector('input[name="email-2"]');
+        if(refInput) refInput.value = refPhotoValue;
+
+        openModal();
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    });
+});
