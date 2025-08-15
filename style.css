@@ -9,6 +9,11 @@ body{
   margin: 0px;
 }
 
+#main{
+
+  margin-top: 50px;
+}
+
 /*
 Styles css pour le header
 */
@@ -76,41 +81,49 @@ Styles css pour le hero header
 .hero-container {
   position: relative;
   width: 100%;
+  aspect-ratio: 16/9;
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 16/9;
+  background-size: cover;
+  background-position: center;
   overflow: hidden;
 }
 
-.hero-image {
+.hero-container::before {
+  content: '';
   position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4); /* Overlay pour lisibilité */
   z-index: 1;
 }
 
 .hero-title-wrapper {
+  position: relative;
   z-index: 2;
+  text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  padding: 0 20px;
 }
 
 .hero-title {
   font-family: 'Space Mono', monospace;
   font-style: italic;
   font-weight: 700;
-  font-size: 125px;
+  font-size: clamp(40px, 10vw, 125px);
   text-transform: uppercase;
-  text-align: center;
-  white-space: nowrap;
   color: transparent;
   -webkit-text-stroke: 2px white;
-  text-shadow: none;
+  line-height: 1.1;
+  margin: 0;
 }
+
+
+
 
 
 /*

@@ -2,6 +2,22 @@
 <!-- page d'accueil -->
 <main class="main-content">
     <div class="container">
+
+<?php
+// Récupération de l'image du Hero via ACF
+$hero_image = get_field('hero_image');
+if (!$hero_image) {
+    // Image par défaut si aucun champ n'est rempli
+    $hero_image = get_stylesheet_directory_uri() . '/assets/images/nathalie-1.jpeg';
+}
+?>
+<section class="hero-header">
+  <div class="hero-container" style="background-image: url('<?php echo esc_url($hero_image); ?>');">
+    <div class="hero-title-wrapper">
+      <h1 class="hero-title">PHOTOGRAPHE EVENT</h1>
+    </div>
+  </div>
+</section>
        
         <?php while (have_posts()) : the_post(); ?>
             <article class="page-content-wrapper">

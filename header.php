@@ -27,12 +27,5 @@
 </header>
 
 
-<section class="hero-header">
-  <div class="hero-container">
-    <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/images/nathalie-1.jpeg" alt="Image Hero" class="hero-image" />
-    <div class="hero-title-wrapper">
-      <h1 class="hero-title">PHOTOGRAPHE EVENT</h1>
-    </div>
-  </div>
-</section>
+
 
