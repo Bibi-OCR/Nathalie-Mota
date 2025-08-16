@@ -149,3 +149,166 @@ document.addEventListener('DOMContentLoaded', function () {
         console.warn("Éléments Load More non trouvés dans le DOM");
     }
 });
+
+// =======================
+    // DROPDOWNS PERSONNALISÉS
+    // =======================
+    
+    // Variables pour gérer l'état des filtres
+    let currentFilters = {
+        category: '',
+        format: '',
+        sort: 'desc',
+        page: 1
+    };
+
+    // Initialiser les dropdowns personnalisés
+    function initCustomSelects() {
+        const customSelects = document.querySelectorAll('.custom-select');
+        
+        customSelects.forEach(function(customSelect) {
+            const selected = customSelect.querySelector('.select-selected');
+            const items = customSelect.querySelector('.select-items');
+            const options = items.querySelectorAll('div');
+            
+            // Clic sur le dropdown pour l'ouvrir/fermer
+            selected.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeAllSelect(customSelect);
+                items.classList.toggle('select-hide');
+                selected.classList.toggle('select-arrow-active');
+            });
+            
+            // Clic sur une option
+            options.forEach(function(option) {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    const value = this.getAttribute('data-value');
+                    const text = this.textContent;
+                    const filterType = customSelect.getAttribute('data-filter');
+                    
+                    // Mettre à jour l'affichage
+                    selected.textContent = text;
+                    
+                    // Supprimer la classe "same-as-selected" de toutes les options
+                    options.forEach(opt => opt.classList.remove('same-as-selected'));
+                    
+                    // Ajouter la classe à l'option sélectionnée
+                    this.classList.add('same-as-selected');
+                    
+                    // Mettre à jour le filtre
+                    currentFilters[filterType] = value;
+                    currentFilters.page = 1;
+                    
+                    // Charger les photos filtrées
+                    loadFilteredPhotos(false);
+                    
+                    // Fermer le dropdown
+                    items.classList.add('select-hide');
+                    selected.classList.remove('select-arrow-active');
+                });
+            });
+        });
+    }
+    
+    // Fermer tous les dropdowns sauf celui passé en paramètre
+    function closeAllSelect(exceptThis) {
+        const items = document.querySelectorAll('.select-items');
+        const selected = document.querySelectorAll('.select-selected');
+        
+        items.forEach(function(item, index) {
+            if (exceptThis !== item.parentElement) {
+                item.classList.add('select-hide');
+                selected[index].classList.remove('select-arrow-active');
+            }
+        });
+    }
+    
+    // Fermer tous les dropdowns en cliquant ailleurs
+    document.addEventListener('click', function() {
+        closeAllSelect();
+    });
+    
+    // Fonction pour afficher/masquer le spinner
+    function toggleLoading(show) {
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const loadMoreBtn = document.getElementById('load-more-photos');
+        
+        if (loadingSpinner) {
+            loadingSpinner.style.display = show ? 'flex' : 'none';
+        }
+        if (loadMoreBtn) {
+            loadMoreBtn.disabled = show;
+            loadMoreBtn.textContent = show ? 'Chargement...' : 'Charger plus';
+        }
+    }
+    
+    // Fonction pour charger les photos avec filtres
+    function loadFilteredPhotos(isLoadMore = false) {
+        const photoGrid = document.getElementById('photo-grid');
+        if (!photoGrid) return;
+
+        toggleLoading(true);
+
+        const formData = new FormData();
+        formData.append('action', 'filter_photos');
+        formData.append('category', currentFilters.category);
+        formData.append('format', currentFilters.format);
+        formData.append('sort', currentFilters.sort);
+        formData.append('page', currentFilters.page);
+
+        fetch(wp_ajax_object.ajax_url, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            const loadMoreBtn = document.getElementById('load-more-photos');
+            
+            if (data.html) {
+                if (isLoadMore) {
+                    photoGrid.insertAdjacentHTML('beforeend', data.html);
+                } else {
+                    photoGrid.innerHTML = data.html;
+                }
+
+                if (loadMoreBtn) {
+                    if (data.has_more) {
+                        loadMoreBtn.style.display = 'block';
+                        loadMoreBtn.setAttribute('data-page', data.current_page);
+                    } else {
+                        loadMoreBtn.style.display = 'none';
+                    }
+                }
+            } else {
+                if (!isLoadMore) {
+                    photoGrid.innerHTML = '<p>Aucune photo trouvée pour ces critères.</p>';
+                }
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+
+            toggleLoading(false);
+        })
+        .catch(error => {
+            console.error('Erreur lors du filtrage:', error);
+            toggleLoading(false);
+        });
+    }
+    
+    // Modifier le bouton "Charger plus"
+    const loadMoreBtn = document.getElementById('load-more-photos');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentFilters.page += 1;
+            loadFilteredPhotos(true);
+        });
+    }
+    
+    // Initialiser les dropdowns au chargement
+    initCustomSelects();
+    
+    console.log("✅ Dropdowns personnalisés chargés et connectés");

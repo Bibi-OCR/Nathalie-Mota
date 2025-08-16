@@ -127,4 +127,90 @@ function debug_load_more() {
 }
 // add_action('wp_ajax_load_more_photos', 'debug_load_more', 5);
 // add_action('wp_ajax_nopriv_load_more_photos', 'debug_load_more', 5);
+
+
+// AJAX Filter Photos - Nouvelle fonction pour les filtres
+function filter_photos_ajax() {
+    // Récupérer les paramètres du formulaire
+    $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
+    $format = isset($_POST['format']) ? sanitize_text_field($_POST['format']) : '';
+    $sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'desc';
+    $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
+
+    // Arguments de base pour la requête
+    $args = [
+        'post_type' => 'photo',
+        'posts_per_page' => 8,
+        'paged' => $paged,
+        'post_status' => 'publish',
+        'orderby' => 'date',
+        'order' => strtoupper($sort),
+    ];
+
+    // Ajouter les filtres taxonomiques
+    $tax_query = [];
+
+    if (!empty($category)) {
+        $tax_query[] = [
+            'taxonomy' => 'photo_categorie',
+            'field'    => 'slug',
+            'terms'    => $category,
+        ];
+    }
+
+    if (!empty($format)) {
+        $tax_query[] = [
+            'taxonomy' => 'photo_format',
+            'field'    => 'slug',
+            'terms'    => $format,
+        ];
+    }
+
+    if (!empty($tax_query)) {
+        $args['tax_query'] = $tax_query;
+        if (count($tax_query) > 1) {
+            $args['tax_query']['relation'] = 'AND';
+        }
+    }
+
+    // Exécuter la requête
+    $query = new WP_Query($args);
+    
+    $html = '';
+    $has_more = false;
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            
+            $html .= '<article class="photo-item">';
+            $html .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">';
+            
+            if (has_post_thumbnail()) {
+                $html .= get_the_post_thumbnail(get_the_ID(), 'medium');
+            } else {
+                $html .= '<div class="no-thumbnail">Pas d\'image disponible</div>';
+            }
+            
+            $html .= '</a>';
+            $html .= '</article>';
+        }
+        
+        // Vérifier s'il y a plus de photos à charger
+        $has_more = ($query->max_num_pages > $paged);
+    }
+
+    wp_reset_postdata();
+    
+    // Retourner la réponse JSON
+    wp_send_json([
+        'html' => $html,
+        'has_more' => $has_more,
+        'current_page' => $paged,
+        'max_pages' => $query->max_num_pages
+    ]);
+}
+add_action('wp_ajax_filter_photos', 'filter_photos_ajax');
+add_action('wp_ajax_nopriv_filter_photos', 'filter_photos_ajax');
 ?>
+

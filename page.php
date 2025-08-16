@@ -18,6 +18,8 @@ if (!$hero_image) {
   </div>
 </section>
 
+<?php get_template_part('templates-parts/photo-filters'); ?>
+
 <?php while (have_posts()) : the_post(); ?>
     <article class="page-content-wrapper">
 
