@@ -1,7 +1,6 @@
 <?php
 /**
- * 
- * Template pour l'affichage d'un bloc photo
+ * Template pour l'affichage d'un bloc photo avec support lightbox
  */
 
 $reference = get_field('reference');
@@ -9,6 +8,12 @@ $categories = get_the_terms(get_the_ID(), 'photo_categorie');
 $category_name = '';
 if (!empty($categories) && !is_wp_error($categories)) {
     $category_name = $categories[0]->name;
+}
+
+// URL de l'image en haute résolution pour la lightbox
+$full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+if (!$full_image_url) {
+    $full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
 }
 ?>
 
@@ -26,11 +31,13 @@ if (!empty($categories) && !is_wp_error($categories)) {
                     </svg>
                 </a>
                 
-                <!-- Icône plein écran -->
+                <!-- Icône plein écran avec données pour la lightbox -->
                 <a href="#" class="icon-fullscreen" 
-                   data-full-src="<?php echo get_the_post_thumbnail_url(get_the_ID(), 'full'); ?>" 
+                   data-full-src="<?php echo esc_url($full_image_url); ?>" 
                    data-reference="<?php echo esc_attr($reference); ?>" 
                    data-category="<?php echo esc_attr($category_name); ?>"
+                   data-title="<?php echo esc_attr(get_the_title()); ?>"
+                   data-permalink="<?php echo esc_url(get_permalink()); ?>"
                    title="Affichage plein écran">
                     <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9.5 9.5H16.5V12.5H12.5V16.5H9.5V9.5ZM33.5 9.5V16.5H30.5V12.5H26.5V9.5H33.5ZM30.5 33.5V29.5H33.5V36.5H26.5V33.5H30.5ZM16.5 33.5V36.5H9.5V29.5H12.5V33.5H16.5Z" fill="white"/>

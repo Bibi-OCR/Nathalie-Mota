@@ -131,6 +131,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadMoreBtn.disabled = false;
                     loadMoreBtn.textContent = 'Charger plus';
                     
+                    // NOUVEAU: Déclencher l'événement pour rafraîchir la lightbox
+                    document.dispatchEvent(new CustomEvent('photosLoaded'));
+                    
                     console.log("Photos ajoutées, page actuelle :", nextPage);
                 }
             })
@@ -148,9 +151,8 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         console.warn("Éléments Load More non trouvés dans le DOM");
     }
-});
 
-// =======================
+    // =======================
     // DROPDOWNS PERSONNALISÉS
     // =======================
     
@@ -273,6 +275,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     photoGrid.innerHTML = data.html;
                 }
 
+                // NOUVEAU: Déclencher l'événement pour rafraîchir la lightbox
+                document.dispatchEvent(new CustomEvent('photosLoaded'));
+
                 if (loadMoreBtn) {
                     if (data.has_more) {
                         loadMoreBtn.style.display = 'block';
@@ -299,9 +304,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     // Modifier le bouton "Charger plus"
-    const loadMoreBtn = document.getElementById('load-more-photos');
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', function(e) {
+    const loadMoreBtn2 = document.getElementById('load-more-photos');
+    if (loadMoreBtn2) {
+        loadMoreBtn2.addEventListener('click', function(e) {
             e.preventDefault();
             currentFilters.page += 1;
             loadFilteredPhotos(true);
@@ -312,3 +317,4 @@ document.addEventListener('DOMContentLoaded', function () {
     initCustomSelects();
     
     console.log("✅ Dropdowns personnalisés chargés et connectés");
+});
