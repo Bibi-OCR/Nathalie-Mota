@@ -38,11 +38,11 @@
                 <section class="frontpage-photos">
                     <?php
                     $args = [
-                        'post_type' => 'photo',
+                        'post_type'      => 'photo',
                         'posts_per_page' => 8,
-                        'orderby' => 'date',
-                        'order' => 'DESC',
-                        'paged' => 1,
+                        'orderby'        => 'date',
+                        'order'          => 'DESC',
+                        'paged'          => 1,
                     ];
                     $photos_query = new WP_Query($args);
 
@@ -52,7 +52,7 @@
                             $photos_query->the_post(); 
                             
                             // Récupérer les métadonnées pour la lightbox
-                            $reference = get_field('reference');
+                            $reference  = get_field('reference');
                             $categories = get_the_terms(get_the_ID(), 'photo_categorie');
                             $category_name = '';
                             if (!empty($categories) && !is_wp_error($categories)) {
@@ -97,8 +97,14 @@
                                            data-title="<?php echo esc_attr(get_the_title()); ?>"
                                            data-permalink="<?php echo esc_url(get_permalink()); ?>"
                                            title="Affichage plein écran">
-                                            <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M9.5 9.5H16.5V12.5H12.5V16.5H9.5V9.5ZM33.5 9.5V16.5H30.5V12.5H26.5V9.5H33.5ZM30.5 33.5V29.5H33.5V36.5H26.5V33.5H30.5ZM16.5 33.5V36.5H9.5V29.5H12.5V33.5H16.5Z" fill="white"/>
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" 
+                                                 viewBox="0 0 24 24" fill="none" stroke="white" 
+                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M3 9V5a2 2 0 0 1 2-2h4"/>
+                                                <path d="M21 9V5a2 2 0 0 0-2-2h-4"/>
+                                                <path d="M21 15v4a2 2 0 0 1-2 2h-4"/>
+                                                <path d="M3 15v4a2 2 0 0 0 2 2h4"/>
                                             </svg>
                                         </a>
                                         

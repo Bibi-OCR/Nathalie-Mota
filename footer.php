@@ -30,6 +30,7 @@
 
 <?php get_template_part('templates-parts/modal-contact'); ?>
 
+
 <!-- Lightbox Structure -->
 <div id="nathalie-lightbox" class="lightbox-overlay">
     <div class="lightbox-container">
@@ -53,12 +54,21 @@
         <!-- Contenu principal -->
         <div class="lightbox-content">
             <!-- Image -->
-            <div class="lightbox-image-container">
+            <figure class="lightbox-image-container">
                 <img src="" alt="" class="lightbox-image">
+                 <!-- AJOUT: Informations de la photo -->
+                <figcaption class="lightbox-info">
+                  
+                  <span class="lightbox-reference"></span>
+                  <span class="lightbox-category"></span>
+                    
+                </figcaption>
                 <div class="lightbox-loading">
                     <div class="loading-spinner"></div>
                 </div>
-            </div>
+            </figure>
+            
+           
         </div>
     </div>
 </div>

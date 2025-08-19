@@ -100,24 +100,30 @@ function load_more_photos_ajax() {
             // Overlay avec icônes
             $html .= '<div class="photo-overlay">';
             
-            // Icône œil
+            // Icône œil - CORRECTION AVEC STYLE INLINE
             $html .= '<a href="' . get_permalink() . '" class="icon-eye" title="Voir les détails">';
-            $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">';
-            $html .= '<path d="M23 9C17 9 11.73 12.39 9 17.5C11.73 22.61 17 26 23 26C29 26 34.27 22.61 37 17.5C34.27 12.39 29 9 23 9ZM23 22.5C19.97 22.5 17.5 20.03 17.5 17.5C17.5 14.97 19.97 12.5 23 12.5C26.03 12.5 28.5 14.97 28.5 17.5C28.5 20.03 26.03 22.5 23 22.5Z" fill="white"/>';
-            $html .= '<circle cx="23" cy="17.5" r="2.5" fill="white"/>';
+            $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: white !important;">';
+            $html .= '<path d="M23 9C17 9 11.73 12.39 9 17.5C11.73 22.61 17 26 23 26C29 26 34.27 22.61 37 17.5C34.27 12.39 29 9 23 9ZM23 22.5C19.97 22.5 17.5 20.03 17.5 17.5C17.5 14.97 19.97 12.5 23 12.5C26.03 12.5 28.5 14.97 28.5 17.5C28.5 20.03 26.03 22.5 23 22.5Z" fill="white" style="fill: white !important;"/>';
+            $html .= '<circle cx="23" cy="17.5" r="2.5" fill="white" style="fill: white !important;"/>';
             $html .= '</svg>';
             $html .= '</a>';
             
-            // Icône plein écran avec données lightbox
-            $html .= '<a href="#" class="icon-fullscreen" ';
-            $html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
-            $html .= 'data-reference="' . esc_attr($reference) . '" ';
-            $html .= 'data-category="' . esc_attr($category_name) . '" ';
-            $html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
-            $html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
-            $html .= 'title="Affichage plein écran">';
-            $html .= '<img src="' . get_template_directory_uri() . '/assets/images/icon_fullscreen.png" alt="Plein écran" width="34" height="34">';
-            $html .= '</a>';
+$html .= '<a href="#" class="icon-fullscreen" ';
+$html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
+$html .= 'data-reference="' . esc_attr($reference) . '" ';
+$html .= 'data-category="' . esc_attr($category_name) . '" ';
+$html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
+$html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
+$html .= 'title="Affichage plein écran">';
+
+$html .= '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+$html .= '<path d="M3 9V5a2 2 0 0 1 2-2h4"/>';
+$html .= '<path d="M21 9V5a2 2 0 0 0-2-2h-4"/>';
+$html .= '<path d="M21 15v4a2 2 0 0 1-2 2h-4"/>';
+$html .= '<path d="M3 15v4a2 2 0 0 0 2 2h4"/>';
+$html .= '</svg>';
+
+$html .= '</a>';
             
             // Métadonnées
             $html .= '<div class="photo-meta">';
@@ -241,24 +247,32 @@ function filter_photos_ajax() {
             
             $html .= '<div class="photo-overlay">';
             
-            // Icône œil
+            // Icône œil - MÊME CORRECTION AVEC STYLE INLINE
             $html .= '<a href="' . get_permalink() . '" class="icon-eye" title="Voir les détails">';
-            $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">';
-            $html .= '<path d="M23 9C17 9 11.73 12.39 9 17.5C11.73 22.61 17 26 23 26C29 26 34.27 22.61 37 17.5C34.27 12.39 29 9 23 9ZM23 22.5C19.97 22.5 17.5 20.03 17.5 17.5C17.5 14.97 19.97 12.5 23 12.5C26.03 12.5 28.5 14.97 28.5 17.5C28.5 20.03 26.03 22.5 23 22.5Z" fill="white"/>';
-            $html .= '<circle cx="23" cy="17.5" r="2.5" fill="white"/>';
+            $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: white !important;">';
+            $html .= '<path d="M23 9C17 9 11.73 12.39 9 17.5C11.73 22.61 17 26 23 26C29 26 34.27 22.61 37 17.5C34.27 12.39 29 9 23 9ZM23 22.5C19.97 22.5 17.5 20.03 17.5 17.5C17.5 14.97 19.97 12.5 23 12.5C26.03 12.5 28.5 14.97 28.5 17.5C28.5 20.03 26.03 22.5 23 22.5Z" fill="white" style="fill: white !important;"/>';
+            $html .= '<circle cx="23" cy="17.5" r="2.5" fill="white" style="fill: white !important;"/>';
             $html .= '</svg>';
             $html .= '</a>';
             
             // Icône plein écran
-            $html .= '<a href="#" class="icon-fullscreen" ';
-            $html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
-            $html .= 'data-reference="' . esc_attr($reference) . '" ';
-            $html .= 'data-category="' . esc_attr($category_name) . '" ';
-            $html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
-            $html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
-            $html .= 'title="Affichage plein écran">';
-            $html .= '<img src="' . get_template_directory_uri() . '/assets/images/icon_fullscreen.png" alt="Plein écran" width="34" height="34">';
-            $html .= '</a>';
+$html .= '<a href="#" class="icon-fullscreen" ';
+$html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
+$html .= 'data-reference="' . esc_attr($reference) . '" ';
+$html .= 'data-category="' . esc_attr($category_name) . '" ';
+$html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
+$html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
+$html .= 'title="Affichage plein écran">';
+
+$html .= '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+$html .= '<path d="M3 9V5a2 2 0 0 1 2-2h4"/>';
+$html .= '<path d="M21 9V5a2 2 0 0 0-2-2h-4"/>';
+$html .= '<path d="M21 15v4a2 2 0 0 1-2 2h-4"/>';
+$html .= '<path d="M3 15v4a2 2 0 0 0 2 2h4"/>';
+$html .= '</svg>';
+
+$html .= '</a>';
+
             
             $html .= '<div class="photo-meta">';
             $html .= '<div class="photo-info">';

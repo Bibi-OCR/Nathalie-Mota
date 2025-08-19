@@ -194,6 +194,9 @@ class NathalieLightbox {
         loading.style.display = 'flex';
         img.style.opacity = '0';
 
+        // Mettre à jour les métadonnées
+        this.updateLightboxInfo(photo);
+
         // Charger l'image
         const newImg = new Image();
         newImg.onload = () => {
@@ -226,6 +229,18 @@ class NathalieLightbox {
             console.warn('URL d\'image vide pour la photo:', photo.title);
             newImg.onerror();
         }
+    }
+
+    updateLightboxInfo(photo) {
+        const lightbox = document.getElementById('nathalie-lightbox');
+        
+        // Créer ou mettre à jour les informations si elles n'existent pas
+
+
+        lightbox.querySelector('.lightbox-reference').innerHTML = photo.reference;
+        lightbox.querySelector('.lightbox-category').innerHTML = photo.category;
+       
+
     }
 
     next() {
