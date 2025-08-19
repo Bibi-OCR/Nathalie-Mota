@@ -160,9 +160,6 @@ class NathalieLightbox {
         // Charger la photo
         this.loadPhoto(this.currentIndex);
 
-        // Mettre à jour le compteur
-        this.updateCounter();
-
         // Focus sur la lightbox pour l'accessibilité
         lightbox.focus();
     }
@@ -192,34 +189,10 @@ class NathalieLightbox {
         const lightbox = document.getElementById('nathalie-lightbox');
         const img = lightbox.querySelector('.lightbox-image');
         const loading = lightbox.querySelector('.lightbox-loading');
-        const title = lightbox.querySelector('.lightbox-title');
-        const reference = lightbox.querySelector('.lightbox-reference');
-        const category = lightbox.querySelector('.lightbox-category');
 
         // Afficher le spinner de chargement
         loading.style.display = 'flex';
         img.style.opacity = '0';
-
-        // Mettre à jour les informations
-        title.textContent = photo.title || 'Photo sans titre';
-        
-        // Gérer la référence
-        if (photo.reference) {
-            reference.textContent = photo.reference;
-            reference.style.display = 'inline';
-        } else {
-            reference.textContent = '';
-            reference.style.display = 'none';
-        }
-        
-        // Gérer la catégorie
-        if (photo.category) {
-            category.textContent = photo.category;
-            category.style.display = 'inline';
-        } else {
-            category.textContent = '';
-            category.style.display = 'none';
-        }
 
         // Charger l'image
         const newImg = new Image();
@@ -260,7 +233,6 @@ class NathalieLightbox {
 
         this.currentIndex = (this.currentIndex + 1) % this.photos.length;
         this.loadPhoto(this.currentIndex);
-        this.updateCounter();
     }
 
     prev() {
@@ -268,32 +240,6 @@ class NathalieLightbox {
 
         this.currentIndex = (this.currentIndex - 1 + this.photos.length) % this.photos.length;
         this.loadPhoto(this.currentIndex);
-        this.updateCounter();
-    }
-
-    updateCounter() {
-        const lightbox = document.getElementById('nathalie-lightbox');
-        if (!lightbox) return;
-
-        const currentSpan = lightbox.querySelector('.current-photo');
-        const totalSpan = lightbox.querySelector('.total-photos');
-
-        if (currentSpan && totalSpan) {
-            currentSpan.textContent = this.currentIndex + 1;
-            totalSpan.textContent = this.photos.length;
-        }
-
-        // Mettre à jour l'état des boutons de navigation
-        const prevBtn = lightbox.querySelector('.lightbox-prev');
-        const nextBtn = lightbox.querySelector('.lightbox-next');
-
-        if (this.photos.length <= 1) {
-            if (prevBtn) prevBtn.style.display = 'none';
-            if (nextBtn) nextBtn.style.display = 'none';
-        } else {
-            if (prevBtn) prevBtn.style.display = 'flex';
-            if (nextBtn) nextBtn.style.display = 'flex';
-        }
     }
 
     // Méthode publique pour rafraîchir la collection de photos

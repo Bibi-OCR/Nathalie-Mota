@@ -116,9 +116,7 @@ function load_more_photos_ajax() {
             $html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
             $html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
             $html .= 'title="Affichage plein écran">';
-            $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">';
-            $html .= '<path d="M9.5 9.5H16.5V12.5H12.5V16.5H9.5V9.5ZM33.5 9.5V16.5H30.5V12.5H26.5V9.5H33.5ZM30.5 33.5V29.5H33.5V36.5H26.5V33.5H30.5ZM16.5 33.5V36.5H9.5V29.5H12.5V33.5H16.5Z" fill="white"/>';
-            $html .= '</svg>';
+            $html .= '<img src="' . get_template_directory_uri() . '/assets/images/icon_fullscreen.png" alt="Plein écran" width="34" height="34">';
             $html .= '</a>';
             
             // Métadonnées
@@ -259,9 +257,7 @@ function filter_photos_ajax() {
             $html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
             $html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
             $html .= 'title="Affichage plein écran">';
-            $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">';
-            $html .= '<path d="M9.5 9.5H16.5V12.5H12.5V16.5H9.5V9.5ZM33.5 9.5V16.5H30.5V12.5H26.5V9.5H33.5ZM30.5 33.5V29.5H33.5V36.5H26.5V33.5H30.5ZM16.5 33.5V36.5H9.5V29.5H12.5V33.5H16.5Z" fill="white"/>';
-            $html .= '</svg>';
+            $html .= '<img src="' . get_template_directory_uri() . '/assets/images/icon_fullscreen.png" alt="Plein écran" width="34" height="34">';
             $html .= '</a>';
             
             $html .= '<div class="photo-meta">';

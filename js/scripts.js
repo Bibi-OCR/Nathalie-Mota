@@ -168,14 +168,21 @@ document.addEventListener('DOMContentLoaded', function () {
     function initCustomSelects() {
         const customSelects = document.querySelectorAll('.custom-select');
         
+        console.log("Initialisation des dropdowns, trouvés:", customSelects.length);
+        
         customSelects.forEach(function(customSelect) {
             const selected = customSelect.querySelector('.select-selected');
             const items = customSelect.querySelector('.select-items');
             const options = items.querySelectorAll('div');
             
+            console.log("Dropdown trouvé:", customSelect.getAttribute('data-filter'), "avec", options.length, "options");
+            
             // Clic sur le dropdown pour l'ouvrir/fermer
             selected.addEventListener('click', function(e) {
+                e.preventDefault();
                 e.stopPropagation();
+                console.log("Clic sur dropdown:", customSelect.getAttribute('data-filter'));
+                
                 closeAllSelect(customSelect);
                 items.classList.toggle('select-hide');
                 selected.classList.toggle('select-arrow-active');
@@ -184,11 +191,14 @@ document.addEventListener('DOMContentLoaded', function () {
             // Clic sur une option
             options.forEach(function(option) {
                 option.addEventListener('click', function(e) {
+                    e.preventDefault();
                     e.stopPropagation();
                     
                     const value = this.getAttribute('data-value');
                     const text = this.textContent;
                     const filterType = customSelect.getAttribute('data-filter');
+                    
+                    console.log("Option sélectionnée:", filterType, "=", value, "(" + text + ")");
                     
                     // Mettre à jour l'affichage
                     selected.textContent = text;
@@ -202,6 +212,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Mettre à jour le filtre
                     currentFilters[filterType] = value;
                     currentFilters.page = 1;
+                    
+                    console.log("Filtres actuels:", currentFilters);
                     
                     // Charger les photos filtrées
                     loadFilteredPhotos(false);
@@ -222,14 +234,19 @@ document.addEventListener('DOMContentLoaded', function () {
         items.forEach(function(item, index) {
             if (exceptThis !== item.parentElement) {
                 item.classList.add('select-hide');
-                selected[index].classList.remove('select-arrow-active');
+                if (selected[index]) {
+                    selected[index].classList.remove('select-arrow-active');
+                }
             }
         });
     }
     
     // Fermer tous les dropdowns en cliquant ailleurs
-    document.addEventListener('click', function() {
-        closeAllSelect();
+    document.addEventListener('click', function(e) {
+        // Vérifier si le clic n'est pas sur un dropdown
+        if (!e.target.closest('.custom-select')) {
+            closeAllSelect();
+        }
     });
     
     // Fonction pour afficher/masquer le spinner
@@ -249,8 +266,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Fonction pour charger les photos avec filtres
     function loadFilteredPhotos(isLoadMore = false) {
         const photoGrid = document.getElementById('photo-grid');
-        if (!photoGrid) return;
+        if (!photoGrid) {
+            console.warn("Grille photo non trouvée");
+            return;
+        }
 
+        console.log("Chargement des photos filtrées:", currentFilters, "isLoadMore:", isLoadMore);
+        
         toggleLoading(true);
 
         const formData = new FormData();
@@ -264,8 +286,15 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur réseau : ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("Réponse AJAX reçue:", data);
+            
             const loadMoreBtn = document.getElementById('load-more-photos');
             
             if (data.html) {
@@ -300,10 +329,16 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => {
             console.error('Erreur lors du filtrage:', error);
             toggleLoading(false);
+            
+            // Afficher un message d'erreur à l'utilisateur
+            const photoGrid = document.getElementById('photo-grid');
+            if (photoGrid && !isLoadMore) {
+                photoGrid.innerHTML = '<p>Erreur lors du chargement des photos. Veuillez réessayer.</p>';
+            }
         });
     }
     
-    // Modifier le bouton "Charger plus"
+    // Modifier le bouton "Charger plus" pour les filtres
     const loadMoreBtn2 = document.getElementById('load-more-photos');
     if (loadMoreBtn2) {
         loadMoreBtn2.addEventListener('click', function(e) {
@@ -314,7 +349,59 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     // Initialiser les dropdowns au chargement
-    initCustomSelects();
-    
-    console.log("✅ Dropdowns personnalisés chargés et connectés");
+    setTimeout(() => {
+        initCustomSelects();
+        console.log("✅ Dropdowns personnalisés chargés et connectés");
+    }, 100);
 });
+
+    // =======================
+    // MENU MOBILE
+    // =======================
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+    const hamburger = document.querySelector('.hamburger');
+    const menuText = document.querySelector('.menu-text');
+
+    if (mobileMenuToggle && mobileMenuOverlay) {
+        mobileMenuToggle.addEventListener('click', function() {
+            const isOpen = mobileMenuOverlay.classList.contains('active');
+            
+            if (isOpen) {
+                // Fermer le menu
+                mobileMenuOverlay.classList.remove('active');
+                hamburger.classList.remove('active');
+                menuText.textContent = 'MENU';
+                document.body.style.overflow = '';
+            } else {
+                // Ouvrir le menu
+                mobileMenuOverlay.classList.add('active');
+                hamburger.classList.add('active');
+                menuText.textContent = 'FERMER';
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        // Fermer le menu en cliquant sur l'overlay
+        mobileMenuOverlay.addEventListener('click', function(e) {
+            if (e.target === mobileMenuOverlay) {
+                mobileMenuOverlay.classList.remove('active');
+                hamburger.classList.remove('active');
+                menuText.textContent = 'MENU';
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Fermer le menu avec la touche Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mobileMenuOverlay.classList.contains('active')) {
+                mobileMenuOverlay.classList.remove('active');
+                hamburger.classList.remove('active');
+                menuText.textContent = 'MENU';
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    console.log("✅ Menu mobile chargé et connecté");
+

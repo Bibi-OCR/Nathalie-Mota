@@ -1379,3 +1379,774 @@ LIGHTBOX STYLES
     opacity: 1;
     transition: opacity 0.3s ease 0.1s;
 }
+
+/* =======================
+   MENU MOBILE STYLES
+   ======================= */
+
+/* Bouton menu mobile */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.menu-text {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
+
+/* Hamburger icon */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 24px;
+  height: 18px;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #000;
+  transition: all 0.3s ease;
+}
+
+/* Animation hamburger vers X */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* Overlay menu mobile */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #E00000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Menu mobile navigation */
+.mobile-nav {
+  text-align: center;
+}
+
+.mobile-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.mobile-menu li {
+  margin: 0;
+}
+
+.mobile-menu a {
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 44px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu a:hover {
+  opacity: 0.8;
+}
+
+/* Footer mobile styles */
+.mobile-footer {
+  display: none;
+}
+
+.footer-menu-mobile {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-menu-mobile a {
+  color: #000;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Media queries pour mobile */
+@media (max-width: 768px) {
+  /* Masquer le menu desktop */
+  .desktop-nav {
+    display: none;
+  }
+  
+  /* Afficher le bouton menu mobile */
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  /* Ajuster le header pour mobile */
+  .site-header .container {
+    padding: 0 20px;
+  }
+  
+  .site-header__logo {
+    flex: 1;
+    justify-content: flex-start;
+  }
+  
+  .site-header__nav {
+    margin-right: 0;
+  }
+  
+  /* Footer mobile */
+  .desktop-footer {
+    display: none;
+  }
+  
+  .mobile-footer {
+    display: block;
+  }
+  
+  .footer-content {
+    text-align: center;
+    padding: 40px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Ajustements pour très petits écrans */
+  .mobile-menu a {
+    font-size: 36px;
+  }
+  
+  .mobile-menu {
+    gap: 30px;
+  }
+  
+  .site-header__logo img {
+    max-width: 180px;
+  }
+}
+
+
+/* =======================
+   LIGHTBOX STYLES
+   ======================= */
+
+/* Overlay lightbox */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.lightbox-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Container lightbox */
+.lightbox-container {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bouton fermeture */
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10001;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.lightbox-close:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Navigation lightbox */
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10001;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox-nav:hover {
+  opacity: 0.8;
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+.lightbox-nav .arrow-icon {
+  width: 100px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+
+/* Contenu principal */
+.lightbox-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Container image */
+.lightbox-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: opacity 0.3s ease;
+}
+
+/* Loading spinner */
+.lightbox-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive lightbox */
+@media (max-width: 768px) {
+  .lightbox-container {
+    width: 95%;
+    height: 95%;
+  }
+  
+  .lightbox-nav {
+    padding: 15px;
+  }
+  
+  .lightbox-nav .arrow-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .lightbox-prev {
+    left: 10px;
+  }
+  
+  .lightbox-next {
+    right: 10px;
+  }
+  
+  .lightbox-close {
+    top: 10px;
+    right: 10px;
+    padding: 8px;
+  }
+  
+  .lightbox-close svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lightbox-container {
+    width: 98%;
+    height: 98%;
+  }
+  
+  .lightbox-nav {
+    padding: 10px;
+  }
+  
+  .lightbox-nav .arrow-icon {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .lightbox-prev {
+    left: 5px;
+  }
+  
+  .lightbox-next {
+    right: 5px;
+  }
+  
+  .lightbox-close {
+    top: 5px;
+    right: 5px;
+    padding: 6px;
+  }
+  
+  .lightbox-close svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+
+/* =======================
+   RESPONSIVE DESIGN MOBILE
+   ======================= */
+
+/* Styles généraux pour mobile */
+@media (max-width: 768px) {
+  /* Container principal */
+  .container {
+    padding: 0 20px;
+  }
+  
+  /* Hero section mobile */
+  .hero-section {
+    height: 60vh;
+    min-height: 400px;
+  }
+  
+  .hero-content h1 {
+    font-size: 36px;
+    line-height: 1.2;
+  }
+  
+  /* Grille photos mobile */
+  #photo-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+  }
+  
+  .photo-item {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .photo-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  
+  .photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Overlay mobile */
+  .photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 15px;
+    opacity: 1;
+  }
+  
+  .photo-overlay .icon-eye,
+  .photo-overlay .icon-fullscreen {
+    position: static;
+    transform: none;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .photo-overlay .icon-fullscreen img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .photo-meta {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    right: 70px;
+  }
+  
+  .photo-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .photo-reference,
+  .photo-category {
+    color: #fff;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+  
+  /* Filtres mobile */
+  .filters-section {
+    padding: 20px 0;
+  }
+  
+  .filters-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .filters-left {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .filters-right {
+    width: 100%;
+  }
+  
+  .custom-select {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .select-selected {
+    padding: 15px 20px;
+    font-size: 14px;
+  }
+  
+  .select-items {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .select-items div {
+    padding: 15px 20px;
+    font-size: 14px;
+  }
+  
+  /* Bouton "Charger plus" mobile */
+  #load-more-photos {
+    width: 100%;
+    padding: 15px 30px;
+    font-size: 14px;
+    margin: 30px 0;
+  }
+  
+  /* Single photo page mobile */
+  .single-photo-content {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .photo-details {
+    order: 2;
+  }
+  
+  .photo-image-container {
+    order: 1;
+    width: 100%;
+  }
+  
+  .photo-navigation {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+  }
+  
+  .nav-thumbnails {
+    order: 1;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .nav-buttons {
+    order: 2;
+    justify-content: space-between;
+  }
+  
+  /* Contact modal mobile */
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    margin: 20px;
+    padding: 30px 20px;
+  }
+  
+  .modal-form {
+    gap: 20px;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 15px;
+    font-size: 16px;
+  }
+  
+  .form-submit {
+    padding: 15px 30px;
+    font-size: 14px;
+  }
+}
+
+/* Styles pour très petits écrans */
+@media (max-width: 480px) {
+  /* Container */
+  .container {
+    padding: 0 15px;
+  }
+  
+  /* Header mobile */
+  .site-header .container {
+    padding: 0 15px;
+    height: 70px;
+  }
+  
+  .site-header__logo img {
+    max-width: 160px;
+    height: auto;
+  }
+  
+  .menu-text {
+    font-size: 14px;
+  }
+  
+  .hamburger {
+    width: 20px;
+    height: 15px;
+  }
+  
+  /* Hero section */
+  .hero-content h1 {
+    font-size: 28px;
+  }
+  
+  /* Menu mobile overlay */
+  .mobile-menu a {
+    font-size: 32px;
+  }
+  
+  .mobile-menu {
+    gap: 25px;
+  }
+  
+  /* Photos grid */
+  #photo-grid {
+    gap: 15px;
+  }
+  
+  .photo-item {
+    margin-bottom: 15px;
+  }
+  
+  .photo-overlay {
+    padding: 12px;
+  }
+  
+  .photo-overlay .icon-eye,
+  .photo-overlay .icon-fullscreen {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+  
+  .photo-overlay .icon-fullscreen img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .photo-reference,
+  .photo-category {
+    font-size: 11px;
+  }
+  
+  /* Filtres */
+  .select-selected {
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+  
+  .select-items div {
+    padding: 12px 15px;
+    font-size: 13px;
+  }
+  
+  /* Footer mobile */
+  .footer-menu-mobile {
+    gap: 15px;
+  }
+  
+  .footer-menu-mobile a {
+    font-size: 14px;
+  }
+  
+  /* Modal mobile */
+  .modal-content {
+    margin: 10px;
+    padding: 20px 15px;
+  }
+  
+  .modal-title {
+    font-size: 20px;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* Styles pour paysage mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero-section {
+    height: 80vh;
+  }
+  
+  .mobile-menu a {
+    font-size: 36px;
+  }
+  
+  .mobile-menu {
+    gap: 30px;
+  }
+}
+
+/* Styles pour tablettes */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .photo-item {
+    width: 100%;
+  }
+  
+  .filters-container {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .filters-left {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .filters-right {
+    flex: 0 0 200px;
+  }
+}
+
