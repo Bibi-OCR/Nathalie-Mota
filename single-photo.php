@@ -48,10 +48,13 @@ if (!empty($format_terms) && !is_wp_error($format_terms)) {
 }
 
 // Type de la photo (ACF)
-$type_de_photo = get_field('type_de_photo');
-if ($type_de_photo) {
-    echo '<p>Type : ' . esc_html($type_de_photo) . '</p>';
+$type = get_field('type'); 
+if ($type) {
+    echo '<p>Type : ' . esc_html($type) . '</p>';
 }
+
+    
+
 
 // Année de capture
 $date_capture = get_the_date('Y'); 

@@ -1,5 +1,7 @@
 <?php
-// Enqueue styles & scripts
+// ==============================
+// ENQUEUE STYLES & SCRIPTS
+// ==============================
 function nathalie_enqueue_scripts() {
     wp_enqueue_style('nathalie-style', get_stylesheet_uri());
 
@@ -9,14 +11,29 @@ function nathalie_enqueue_scripts() {
     wp_enqueue_script('jquery');
 
     // JS principal
-    wp_enqueue_script('nathalie-scripts', get_template_directory_uri() . '/js/scripts.js', ['jquery'], '1.0', true);
-    
+    wp_enqueue_script(
+        'nathalie-scripts',
+        get_template_directory_uri() . '/js/scripts.js',
+        ['jquery'],
+        '1.0.1',
+        true
+    );
+
+    // Localiser le script pour AJAX
+    wp_localize_script('nathalie-scripts', 'wp_ajax_object', [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('load_more_nonce')
+    ]);
+
     // JS Lightbox
     wp_enqueue_script('nathalie-lightbox', get_template_directory_uri() . '/js/lightbox.js', ['jquery'], '1.0', true);
 }
 add_action('wp_enqueue_scripts', 'nathalie_enqueue_scripts');
 
-// Register menus
+
+// ==============================
+// MENUS
+// ==============================
 function nathalie_register_menus() {
     register_nav_menus([
         'header' => 'Menu principal (Header)',
@@ -25,7 +42,7 @@ function nathalie_register_menus() {
 }
 add_action('after_setup_theme', 'nathalie_register_menus');
 
-// Add data-modal attribute to "Contact" menu item in header menu
+// Ajouter data-modal à l’item Contact
 function nathalie_add_data_modal_to_menu($atts, $item, $args) {
     if ($args->theme_location === 'header' && strtolower($item->title) === 'contact') {
         $atts['data-modal'] = 'contact';
@@ -35,6 +52,14 @@ function nathalie_add_data_modal_to_menu($atts, $item, $args) {
 }
 add_filter('nav_menu_link_attributes', 'nathalie_add_data_modal_to_menu', 10, 3);
 
+
+// ==============================
+// POST THUMBNAILS & HOME QUERY
+// ==============================
+add_action('after_setup_theme', function() {
+    add_theme_support('post-thumbnails');
+});
+
 function nathalie_add_photo_to_home_query($query) {
     if (!is_admin() && $query->is_main_query() && is_home()) {
         $query->set('post_type', ['post', 'photo']);
@@ -42,17 +67,13 @@ function nathalie_add_photo_to_home_query($query) {
 }
 add_action('pre_get_posts', 'nathalie_add_photo_to_home_query');
 
-add_action('after_setup_theme', function() {
-    add_theme_support('post-thumbnails');
-});
 
-// AJAX Load More Photos - Version avec support lightbox
+// ==============================
+// AJAX : LOAD MORE PHOTOS
+// ==============================
 function load_more_photos_ajax() {
     $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
-    
-    if ($paged < 1) {
-        $paged = 1;
-    }
+    if ($paged < 1) $paged = 1;
 
     $args = [
         'post_type' => 'photo',
@@ -67,80 +88,47 @@ function load_more_photos_ajax() {
     $html = '';
 
     if ($query->have_posts()) :
-        while ($query->have_posts()) : 
-            $query->the_post();
-            
-            // Récupérer les métadonnées pour la lightbox
+        while ($query->have_posts()) : $query->the_post();
             $reference = get_field('reference');
             $categories = get_the_terms(get_the_ID(), 'photo_categorie');
-            $category_name = '';
-            if (!empty($categories) && !is_wp_error($categories)) {
-                $category_name = $categories[0]->name;
-            }
-            
-            // URL de l'image en haute résolution
-            $full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
-            if (!$full_image_url) {
-                $full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
-            }
-            
-            // Construire le HTML pour chaque photo avec support lightbox
+            $category_name = !empty($categories) && !is_wp_error($categories) ? $categories[0]->name : '';
+            $full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'full') ?: get_the_post_thumbnail_url(get_the_ID(), 'large');
+
             $html .= '<article class="photo-item">';
             $html .= '<div class="photo-container">';
-            
-            // Lien vers la page détail
             $html .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">';
-            if (has_post_thumbnail()) {
-                $html .= get_the_post_thumbnail(get_the_ID(), 'medium', ['class' => 'photo-image']);
-            } else {
-                $html .= '<div class="no-thumbnail">Pas d\'image disponible</div>';
-            }
+            $html .= has_post_thumbnail() ? get_the_post_thumbnail(get_the_ID(), 'medium', ['class' => 'photo-image']) : '<div class="no-thumbnail">Pas d\'image disponible</div>';
             $html .= '</a>';
-            
-            // Overlay avec icônes
+
+            // Overlay et icônes
             $html .= '<div class="photo-overlay">';
-            
-            // Icône œil - CORRECTION AVEC STYLE INLINE
             $html .= '<a href="' . get_permalink() . '" class="icon-eye" title="Voir les détails">';
             $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: white !important;">';
             $html .= '<path d="M23 9C17 9 11.73 12.39 9 17.5C11.73 22.61 17 26 23 26C29 26 34.27 22.61 37 17.5C34.27 12.39 29 9 23 9ZM23 22.5C19.97 22.5 17.5 20.03 17.5 17.5C17.5 14.97 19.97 12.5 23 12.5C26.03 12.5 28.5 14.97 28.5 17.5C28.5 20.03 26.03 22.5 23 22.5Z" fill="white" style="fill: white !important;"/>';
             $html .= '<circle cx="23" cy="17.5" r="2.5" fill="white" style="fill: white !important;"/>';
-            $html .= '</svg>';
-            $html .= '</a>';
-            
-$html .= '<a href="#" class="icon-fullscreen" ';
-$html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
-$html .= 'data-reference="' . esc_attr($reference) . '" ';
-$html .= 'data-category="' . esc_attr($category_name) . '" ';
-$html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
-$html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
-$html .= 'title="Affichage plein écran">';
+            $html .= '</svg></a>';
 
-$html .= '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
-$html .= '<path d="M3 9V5a2 2 0 0 1 2-2h4"/>';
-$html .= '<path d="M21 9V5a2 2 0 0 0-2-2h-4"/>';
-$html .= '<path d="M21 15v4a2 2 0 0 1-2 2h-4"/>';
-$html .= '<path d="M3 15v4a2 2 0 0 0 2 2h4"/>';
-$html .= '</svg>';
+            $html .= '<a href="#" class="icon-fullscreen" ';
+            $html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
+            $html .= 'data-reference="' . esc_attr($reference) . '" ';
+            $html .= 'data-category="' . esc_attr($category_name) . '" ';
+            $html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
+            $html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
+            $html .= 'title="Affichage plein écran">';
+            $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+            $html .= '<path d="M3 9V5a2 2 0 0 1 2-2h4"/>';
+            $html .= '<path d="M21 9V5a2 2 0 0 0-2-2h-4"/>';
+            $html .= '<path d="M21 15v4a2 2 0 0 1-2 2h-4"/>';
+            $html .= '<path d="M3 15v4a2 2 0 0 0 2 2h4"/>';
+            $html .= '</svg></a>';
 
-$html .= '</a>';
-            
-            // Métadonnées
-            $html .= '<div class="photo-meta">';
-            $html .= '<div class="photo-info">';
-            if ($reference) {
-                $html .= '<span class="photo-reference">' . esc_html($reference) . '</span>';
-            }
-            if ($category_name) {
-                $html .= '<span class="photo-category">' . esc_html($category_name) . '</span>';
-            }
-            $html .= '</div>';
-            $html .= '</div>';
-            
-            $html .= '</div>'; // fin photo-overlay
-            $html .= '</div>'; // fin photo-container
-            $html .= '</article>';
-            
+            $html .= '<div class="photo-meta"><div class="photo-info">';
+            if ($reference) $html .= '<span class="photo-reference">' . esc_html($reference) . '</span>';
+            if ($category_name) $html .= '<span class="photo-category">' . esc_html($category_name) . '</span>';
+            $html .= '</div></div>';
+
+            $html .= '</div></div></article>';
+
         endwhile;
     endif;
 
@@ -151,25 +139,10 @@ $html .= '</a>';
 add_action('wp_ajax_load_more_photos', 'load_more_photos_ajax');
 add_action('wp_ajax_nopriv_load_more_photos', 'load_more_photos_ajax');
 
-// Fonction pour enqueue les scripts avec nonce (sécurité renforcée)
-function enqueue_custom_scripts() {
-    wp_enqueue_script(
-        'main-script',
-        get_template_directory_uri() . '/js/scripts.js',
-        array('jquery'),
-        '1.0.1',
-        true
-    );
 
-    // Localiser le script avec les variables nécessaires
-    wp_localize_script('main-script', 'wp_ajax_object', array(
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('load_more_nonce'),
-    ));
-}
-add_action('wp_enqueue_scripts', 'enqueue_custom_scripts');
-
-// AJAX Filter Photos - Version avec support lightbox
+// ==============================
+// AJAX : FILTER PHOTOS
+// ==============================
 function filter_photos_ajax() {
     $category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
     $format = isset($_POST['format']) ? sanitize_text_field($_POST['format']) : '';
@@ -185,30 +158,12 @@ function filter_photos_ajax() {
         'order' => strtoupper($sort),
     ];
 
-    // Ajouter les filtres taxonomiques
     $tax_query = [];
-
-    if (!empty($category)) {
-        $tax_query[] = [
-            'taxonomy' => 'photo_categorie',
-            'field'    => 'slug',
-            'terms'    => $category,
-        ];
-    }
-
-    if (!empty($format)) {
-        $tax_query[] = [
-            'taxonomy' => 'photo_format',
-            'field'    => 'slug',
-            'terms'    => $format,
-        ];
-    }
-
+    if ($category) $tax_query[] = ['taxonomy'=>'photo_categorie','field'=>'slug','terms'=>$category];
+    if ($format) $tax_query[] = ['taxonomy'=>'photo_format','field'=>'slug','terms'=>$format];
     if (!empty($tax_query)) {
+        if (count($tax_query) > 1) $tax_query['relation'] = 'AND';
         $args['tax_query'] = $tax_query;
-        if (count($tax_query) > 1) {
-            $args['tax_query']['relation'] = 'AND';
-        }
     }
 
     $query = new WP_Query($args);
@@ -218,83 +173,49 @@ function filter_photos_ajax() {
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
-            
-            // Récupérer les métadonnées pour la lightbox
             $reference = get_field('reference');
             $categories = get_the_terms(get_the_ID(), 'photo_categorie');
-            $category_name = '';
-            if (!empty($categories) && !is_wp_error($categories)) {
-                $category_name = $categories[0]->name;
-            }
-            
-            // URL de l'image en haute résolution
-            $full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
-            if (!$full_image_url) {
-                $full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'large');
-            }
-            
-            // Construire le HTML (même structure que load_more)
+            $category_name = !empty($categories) && !is_wp_error($categories) ? $categories[0]->name : '';
+            $full_image_url = get_the_post_thumbnail_url(get_the_ID(), 'full') ?: get_the_post_thumbnail_url(get_the_ID(), 'large');
+
             $html .= '<article class="photo-item">';
             $html .= '<div class="photo-container">';
-            
             $html .= '<a href="' . get_permalink() . '" title="' . get_the_title() . '">';
-            if (has_post_thumbnail()) {
-                $html .= get_the_post_thumbnail(get_the_ID(), 'medium', ['class' => 'photo-image']);
-            } else {
-                $html .= '<div class="no-thumbnail">Pas d\'image disponible</div>';
-            }
+            $html .= has_post_thumbnail() ? get_the_post_thumbnail(get_the_ID(), 'medium', ['class'=>'photo-image']) : '<div class="no-thumbnail">Pas d\'image disponible</div>';
             $html .= '</a>';
-            
             $html .= '<div class="photo-overlay">';
-            
-            // Icône œil - MÊME CORRECTION AVEC STYLE INLINE
             $html .= '<a href="' . get_permalink() . '" class="icon-eye" title="Voir les détails">';
             $html .= '<svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: white !important;">';
             $html .= '<path d="M23 9C17 9 11.73 12.39 9 17.5C11.73 22.61 17 26 23 26C29 26 34.27 22.61 37 17.5C34.27 12.39 29 9 23 9ZM23 22.5C19.97 22.5 17.5 20.03 17.5 17.5C17.5 14.97 19.97 12.5 23 12.5C26.03 12.5 28.5 14.97 28.5 17.5C28.5 20.03 26.03 22.5 23 22.5Z" fill="white" style="fill: white !important;"/>';
             $html .= '<circle cx="23" cy="17.5" r="2.5" fill="white" style="fill: white !important;"/>';
-            $html .= '</svg>';
-            $html .= '</a>';
-            
-            // Icône plein écran
-$html .= '<a href="#" class="icon-fullscreen" ';
-$html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
-$html .= 'data-reference="' . esc_attr($reference) . '" ';
-$html .= 'data-category="' . esc_attr($category_name) . '" ';
-$html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
-$html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
-$html .= 'title="Affichage plein écran">';
+            $html .= '</svg></a>';
 
-$html .= '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
-$html .= '<path d="M3 9V5a2 2 0 0 1 2-2h4"/>';
-$html .= '<path d="M21 9V5a2 2 0 0 0-2-2h-4"/>';
-$html .= '<path d="M21 15v4a2 2 0 0 1-2 2h-4"/>';
-$html .= '<path d="M3 15v4a2 2 0 0 0 2 2h4"/>';
-$html .= '</svg>';
+            $html .= '<a href="#" class="icon-fullscreen" ';
+            $html .= 'data-full-src="' . esc_url($full_image_url) . '" ';
+            $html .= 'data-reference="' . esc_attr($reference) . '" ';
+            $html .= 'data-category="' . esc_attr($category_name) . '" ';
+            $html .= 'data-title="' . esc_attr(get_the_title()) . '" ';
+            $html .= 'data-permalink="' . esc_url(get_permalink()) . '" ';
+            $html .= 'title="Affichage plein écran">';
+            $html .= '<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+            $html .= '<path d="M3 9V5a2 2 0 0 1 2-2h4"/>';
+            $html .= '<path d="M21 9V5a2 2 0 0 0-2-2h-4"/>';
+            $html .= '<path d="M21 15v4a2 2 0 0 1-2 2h-4"/>';
+            $html .= '<path d="M3 15v4a2 2 0 0 0 2 2h4"/>';
+            $html .= '</svg></a>';
 
-$html .= '</a>';
+            $html .= '<div class="photo-meta"><div class="photo-info">';
+            if ($reference) $html .= '<span class="photo-reference">' . esc_html($reference) . '</span>';
+            if ($category_name) $html .= '<span class="photo-category">' . esc_html($category_name) . '</span>';
+            $html .= '</div></div>';
 
-            
-            $html .= '<div class="photo-meta">';
-            $html .= '<div class="photo-info">';
-            if ($reference) {
-                $html .= '<span class="photo-reference">' . esc_html($reference) . '</span>';
-            }
-            if ($category_name) {
-                $html .= '<span class="photo-category">' . esc_html($category_name) . '</span>';
-            }
-            $html .= '</div>';
-            $html .= '</div>';
-            
-            $html .= '</div>'; // fin photo-overlay
-            $html .= '</div>'; // fin photo-container
-            $html .= '</article>';
+            $html .= '</div></div></article>';
         }
-        
         $has_more = ($query->max_num_pages > $paged);
     }
 
     wp_reset_postdata();
-    
+
     wp_send_json([
         'html' => $html,
         'has_more' => $has_more,

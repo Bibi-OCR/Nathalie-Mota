@@ -26,9 +26,26 @@
       ?>
     </nav>
     
-    <!-- Bouton menu mobile -->
-    <button class="mobile-menu-toggle" aria-label="Ouvrir le menu">
-      <span class="menu-text">MENU</span>
+<!-- Bouton menu mobile (header normal, visible seulement en mobile) -->
+<button class="mobile-menu-toggle" aria-label="Ouvrir le menu">
+  <div class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</button>
+</div>
+
+<!-- Menu mobile overlay -->
+<div class="mobile-menu-overlay">
+
+  <!-- Bande blanche avec logo + bouton fermer -->
+  <div class="mobile-menu-header">
+    <a href="<?php echo home_url('/'); ?>">
+      <img src="<?php echo get_template_directory_uri(); ?>/assets/images/logo.png" 
+           alt="Nathalie Mota" class="mobile-logo">
+    </a>
+    <button class="mobile-menu-toggle" aria-label="Fermer le menu">
       <div class="hamburger">
         <span></span>
         <span></span>
@@ -36,20 +53,20 @@
       </div>
     </button>
   </div>
-  
-  <!-- Menu mobile overlay -->
-  <div class="mobile-menu-overlay">
-    <nav class="mobile-nav">
-      <?php
-        wp_nav_menu(array(
-          'theme_location' => 'header',
-          'container' => false,
-          'menu_class' => 'mobile-menu'
-        ));
-      ?>
-    </nav>
-  </div>
+
+  <!-- Navigation mobile -->
+  <nav class="mobile-nav">
+    <?php
+      wp_nav_menu(array(
+        'theme_location' => 'header',
+        'container'      => false,
+        'menu_class'     => 'mobile-menu'
+      ));
+    ?>
+  </nav>
+</div>
 </header>
+
 
 
 

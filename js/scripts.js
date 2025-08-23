@@ -355,53 +355,67 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 100);
 });
 
-    // =======================
-    // MENU MOBILE
-    // =======================
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-    const hamburger = document.querySelector('.hamburger');
-    const menuText = document.querySelector('.menu-text');
+// ==============================
+// MENU MOBILE (pour petits écrans <768px)
+// ==============================
+const mobileMenuToggles = document.querySelectorAll('.mobile-menu-toggle');
+const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+const hamburgers = document.querySelectorAll('.hamburger');
+const menuTexts = document.querySelectorAll('.menu-text');
 
-    if (mobileMenuToggle && mobileMenuOverlay) {
-        mobileMenuToggle.addEventListener('click', function() {
-            const isOpen = mobileMenuOverlay.classList.contains('active');
-            
-            if (isOpen) {
-                // Fermer le menu
-                mobileMenuOverlay.classList.remove('active');
-                hamburger.classList.remove('active');
-                menuText.textContent = 'MENU';
-                document.body.style.overflow = '';
-            } else {
-                // Ouvrir le menu
-                mobileMenuOverlay.classList.add('active');
-                hamburger.classList.add('active');
-                menuText.textContent = 'FERMER';
-                document.body.style.overflow = 'hidden';
-            }
+function initMobileMenu() {
+    // D'abord, on enlève tous les listeners existants pour éviter les doublons
+    mobileMenuToggles.forEach(btn => {
+        btn.replaceWith(btn.cloneNode(true)); // recrée le bouton sans event listener
+    });
+
+    const toggles = document.querySelectorAll('.mobile-menu-toggle');
+
+    if (window.innerWidth < 768 && toggles.length && mobileMenuOverlay) {
+        toggles.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const isOpen = mobileMenuOverlay.classList.contains('active');
+                
+                if (isOpen) {
+                    // Fermer le menu
+                    mobileMenuOverlay.classList.remove('active');
+                    hamburgers.forEach(h => h.classList.remove('active'));
+                    menuTexts.forEach(t => t.textContent = 'MENU');
+                    document.body.style.overflow = '';
+                } else {
+                    // Ouvrir le menu
+                    mobileMenuOverlay.classList.add('active');
+                    hamburgers.forEach(h => h.classList.add('active'));
+                    menuTexts.forEach(t => t.textContent = 'FERMER');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
         });
 
-        // Fermer le menu en cliquant sur l'overlay
-        mobileMenuOverlay.addEventListener('click', function(e) {
-            if (e.target === mobileMenuOverlay) {
-                mobileMenuOverlay.classList.remove('active');
-                hamburger.classList.remove('active');
-                menuText.textContent = 'MENU';
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Fermer le menu avec la touche Escape
+        // Fermer avec Escape
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && mobileMenuOverlay.classList.contains('active')) {
                 mobileMenuOverlay.classList.remove('active');
-                hamburger.classList.remove('active');
-                menuText.textContent = 'MENU';
+                hamburgers.forEach(h => h.classList.remove('active'));
+                menuTexts.forEach(t => t.textContent = 'MENU');
                 document.body.style.overflow = '';
             }
         });
+    } else {
+        // Si écran >768px, on s'assure que tout est fermé
+        mobileMenuOverlay.classList.remove('active');
+        hamburgers.forEach(h => h.classList.remove('active'));
+        menuTexts.forEach(t => t.textContent = 'MENU');
+        document.body.style.overflow = '';
     }
+}
 
-    console.log("✅ Menu mobile chargé et connecté");
+// Initialisation au chargement
+initMobileMenu();
+
+// Mise à jour au redimensionnement
+window.addEventListener('resize', initMobileMenu);
+
+console.log("✅ Menu mobile chargé et connecté pour écrans <768px");
+
 

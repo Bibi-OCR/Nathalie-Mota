@@ -13,19 +13,7 @@
         ?>
       </nav>
       
-      <!-- Menu footer mobile -->
-      <nav class="footer-navigation mobile-footer">
-        <?php
-          wp_nav_menu(array(
-            'theme_location' => 'footer',
-            'container' => false,
-            'menu_class' => 'footer-menu-mobile',
-            'fallback_cb' => false,
-          ));
-        ?>
-      </nav>
-    </div>
-  </div>
+      
 </footer>
 
 <?php get_template_part('templates-parts/modal-contact'); ?>
