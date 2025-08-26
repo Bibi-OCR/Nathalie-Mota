@@ -358,64 +358,107 @@ document.addEventListener('DOMContentLoaded', function () {
 // ==============================
 // MENU MOBILE (pour petits écrans <768px)
 // ==============================
-const mobileMenuToggles = document.querySelectorAll('.mobile-menu-toggle');
-const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-const hamburgers = document.querySelectorAll('.hamburger');
-const menuTexts = document.querySelectorAll('.menu-text');
 
 function initMobileMenu() {
-    // D'abord, on enlève tous les listeners existants pour éviter les doublons
-    mobileMenuToggles.forEach(btn => {
-        btn.replaceWith(btn.cloneNode(true)); // recrée le bouton sans event listener
+    // Sélectionner les éléments à chaque initialisation (pour éviter les éléments cachés)
+    const mobileMenuToggles = document.querySelectorAll('.mobile-menu-toggle');
+    const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+    const hamburgers = document.querySelectorAll('.hamburger');
+    const menuTexts = document.querySelectorAll('.menu-text');
+
+    // Debug - vérifier que les éléments existent
+    console.log('Éléments trouvés:', {
+        toggles: mobileMenuToggles.length,
+        overlay: !!mobileMenuOverlay,
+        hamburgers: hamburgers.length,
+        menuTexts: menuTexts.length
     });
 
+    // D'abord, on enlève tous les listeners existants pour éviter les doublons
+    mobileMenuToggles.forEach(btn => {
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+    });
+
+    // Re-sélectionner après le clonage
     const toggles = document.querySelectorAll('.mobile-menu-toggle');
+    const newHamburgers = document.querySelectorAll('.hamburger');
+    // menuTexts peut être vide si pas de .menu-text dans le HTML
 
     if (window.innerWidth < 768 && toggles.length && mobileMenuOverlay) {
         toggles.forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
                 const isOpen = mobileMenuOverlay.classList.contains('active');
                 
                 if (isOpen) {
                     // Fermer le menu
                     mobileMenuOverlay.classList.remove('active');
-                    hamburgers.forEach(h => h.classList.remove('active'));
-                    menuTexts.forEach(t => t.textContent = 'MENU');
+                    newHamburgers.forEach(h => {
+                        console.log('Fermeture - hamburger trouvé:', h);
+                        h.classList.remove('active');
+                    });
+                    // Mise à jour du aria-label
+                    btn.setAttribute('aria-label', 'Ouvrir le menu');
                     document.body.style.overflow = '';
                 } else {
                     // Ouvrir le menu
                     mobileMenuOverlay.classList.add('active');
-                    hamburgers.forEach(h => h.classList.add('active'));
-                    menuTexts.forEach(t => t.textContent = 'FERMER');
+                    newHamburgers.forEach(h => {
+                        console.log('Ouverture - hamburger trouvé:', h);
+                        h.classList.add('active');
+                    });
+                    // Mise à jour du aria-label
+                    btn.setAttribute('aria-label', 'Fermer le menu');
                     document.body.style.overflow = 'hidden';
                 }
             });
         });
 
-        // Fermer avec Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && mobileMenuOverlay.classList.contains('active')) {
-                mobileMenuOverlay.classList.remove('active');
-                hamburgers.forEach(h => h.classList.remove('active'));
-                menuTexts.forEach(t => t.textContent = 'MENU');
-                document.body.style.overflow = '';
-            }
-        });
+        // Fermer avec Escape (une seule fois)
+        document.removeEventListener('keydown', handleEscape);
+        document.addEventListener('keydown', handleEscape);
+        
     } else {
         // Si écran >768px, on s'assure que tout est fermé
-        mobileMenuOverlay.classList.remove('active');
-        hamburgers.forEach(h => h.classList.remove('active'));
-        menuTexts.forEach(t => t.textContent = 'MENU');
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.classList.remove('active');
+        }
+        newHamburgers.forEach(h => h.classList.remove('active'));
+        // Réinitialiser l'aria-label
+        toggles.forEach(btn => btn.setAttribute('aria-label', 'Ouvrir le menu'));
         document.body.style.overflow = '';
     }
 }
 
-// Initialisation au chargement
-initMobileMenu();
+// Fonction séparée pour l'événement Escape
+function handleEscape(e) {
+    const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+    const hamburgers = document.querySelectorAll('.hamburger');
+    const toggles = document.querySelectorAll('.mobile-menu-toggle');
+    
+    if (e.key === 'Escape' && mobileMenuOverlay && mobileMenuOverlay.classList.contains('active')) {
+        mobileMenuOverlay.classList.remove('active');
+        hamburgers.forEach(h => h.classList.remove('active'));
+        toggles.forEach(btn => btn.setAttribute('aria-label', 'Ouvrir le menu'));
+        document.body.style.overflow = '';
+    }
+}
 
-// Mise à jour au redimensionnement
-window.addEventListener('resize', initMobileMenu);
+// Attendre que le DOM soit complètement chargé
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+} else {
+    // DOM déjà chargé
+    initMobileMenu();
+}
+
+// Mise à jour au redimensionnement (avec debounce)
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(initMobileMenu, 100);
+});
 
 console.log("✅ Menu mobile chargé et connecté pour écrans <768px");
-
-
